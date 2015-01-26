@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="sedo_tabs_ctrl" title="Tabs controller" version_string="1.0.0" version_id="0" url="" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates>
+    <template title="option_list_sedo_tabs_settings"><![CDATA[<xen:require css="option_list_sedo_tabs_settings.css" />
+
+<xen:controlunit label="{$preparedOption.title}" class="sedo_ctrl_tabs_settings" hint="{$preparedOption.hint}">
+	<xen:explain>{xen:raw $preparedOption.explain}</xen:explain>
+	<xen:html>
+		<ul class="sectionMain">
+			<xen:foreach loop="$tabsList" key="$pos" value="$tabs">
+			<li class="tabs_pos">
+				<ul>
+				<p class="heading">{xen:phrase position}: {$pos}</p>
+					<xen:if is="{$tabs}">
+						<xen:foreach loop="$tabs" key="$tab" value="$default">
+						<li class="section secondaryContent {xen:if '{$config.{$tab}.disableTab}', 'disable'}">
+							<p class="textHeading">{xen:phrase id}: {$tab}</p>
+							<dl class="ctrlUnit">
+								<dt><label for="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][order]">{xen:phrase order}:</label></dt>
+								<dd><xen:textbox name="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][order]" value="{xen:if '{$config.{$tab}.order}', '{$config.{$tab}.order}', '{$default.order}'}" placeholder="{xen:phrase order}" size="6" /></dd>
+							</dl>
+							
+							<xen:set var="$posValue">{xen:if '{$config.{$tab}.position}', '{$config.{$tab}.position}', '{$default.position}'}</xen:set>
+							
+							<xen:selectunit label="{xen:phrase position}:" name="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][position]" value="{$posValue}">	
+								<xen:foreach loop="$defaultPosition" value="$opt_pos">
+									<xen:set var="$pos_selected">{xen:if "{$opt_pos} == {$posValue}", 1, 0}</xen:set>
+									<xen:option value="{$opt_pos}" label="{$opt_pos}" selected="{$pos_selected}" />
+								</xen:foreach>
+							</xen:selectunit>
+
+							<dl class="ctrlUnit">
+								<dt><label for="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][extraClass]">{xen:phrase sedo_tabs_ctrl_extraclass}:</label></dt>
+								<dd><xen:textbox name="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][extraClass]" value="{xen:if '{$config.{$tab}.extraClass}', '{$config.{$tab}.extraClass}', '{$default.extraClass}'}" size="12" /></dd>
+							</dl>
+							
+							{xen:raw $default.checkboxTemplate_usr}
+
+							<dl class="ctrlUnit">
+								<dt><label for="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][disableView]">{xen:phrase sedo_tabs_ctrl_disable_tab_for_view}:</label></dt>
+								<dd><xen:textbox name="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][disableView]" value="{xen:if '{$config.{$tab}.disableView}', '{$config.{$tab}.disableView}', '{$default.disableView}'}" placeholder="{xen:phrase sedo_tabs_ctrl_disable_tab_for_view_explain}" rows="3" /></dd>
+							</dl>
+
+							<p class="disable_tab"><input type="checkbox" name="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][disableTab]" value="1" {xen:if '{$config.{$tab}.disableTab}', 'checked'} /> {xen:phrase disable}</p>
+
+							<p class="default_values muted">{xen:phrase sedo_tabs_ctrl_default_values, 'pos={$default.original.position}', 'order={$default.original.order}'}</p>
+							<input type="hidden" name="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][original][position]" value="{$default.original.position}" />
+							<input type="hidden" name="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][original][order]" value="{$default.original.order}" />
+						</li>
+						</xen:foreach>
+					<xen:else/>
+						<p class="textHeading">{xen:phrase none}</p>
+					</xen:if>
+				</ul>
+			</li>
+			</xen:foreach>
+	
+			<div class="raz"><input type="checkbox" name="{$fieldPrefix}[{$preparedOption.option_id}][raz]" value="1" /> {xen:phrase reset}</div>
+		</ul>
+		{xen:raw $editLink}
+	</xen:html>
+</xen:controlunit>]]></template>
+    <template title="option_list_sedo_tabs_settings.css"><![CDATA[.sedo_ctrl_tabs_settings .secondaryContent.disable{
+	background-color: #f0f0f0;
+}
+
+.sedo_ctrl_tabs_settings .default_values{
+	font-size: 8pt;
+}
+
+.sedo_ctrl_tabs_settings  .section.secondaryContent{
+	margin-top: -3px;
+}
+
+.sedo_ctrl_tabs_settings .raz,
+.sedo_ctrl_tabs_settings .disable_tab{
+	text-align:right;
+}]]></template>
+  </admin_templates>
+  <admin_template_modifications/>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="container_public_params" execute_order="10" callback_class="Sedo_TabsController_Listener" callback_method="container_public_params" active="1" hint="" description="Listen params from the public container"/>
+    <listener event_id="front_controller_pre_view" execute_order="10" callback_class="Sedo_TabsController_Listener" callback_method="controllerPreView" active="1" hint="" description="Get viewName"/>
+    <listener event_id="navigation_tabs" execute_order="9999" callback_class="Sedo_TabsController_Listener" callback_method="nav_tabs" active="1" hint="" description="Navigation tabs"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups>
+    <group group_id="sedo_tabs_controller" display_order="110000" debug_only="0"/>
+    <option option_id="sedo_extratabs_ctrl_settings" edit_format="callback" data_type="array" can_backup="1" validation_class="Sedo_TabsController_Listener" validation_method="tabs_settings_validation">
+      <default_value>a:0:{}</default_value>
+      <edit_format_params>Sedo_TabsController_Listener::tabs_settings</edit_format_params>
+      <sub_options>*</sub_options>
+      <relation group_id="sedo_tabs_controller" display_order="10"/>
+    </option>
+    <option option_id="sedo_tabs_help_disable" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value></default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="sedo_tabs_controller" display_order="220"/>
+    </option>
+    <option option_id="sedo_tabs_help_usergroups" edit_format="callback" data_type="array" can_backup="1">
+      <default_value></default_value>
+      <edit_format_params>Sedo_TabsController_Listener::render_usergroups</edit_format_params>
+      <sub_options>*</sub_options>
+      <relation group_id="sedo_tabs_controller" display_order="200"/>
+    </option>
+    <option option_id="sedo_tabs_members_disable" edit_format="onoff" data_type="boolean" can_backup="1">
+      <default_value></default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="sedo_tabs_controller" display_order="110"/>
+    </option>
+    <option option_id="sedo_tabs_members_usergroups" edit_format="callback" data_type="array" can_backup="1">
+      <default_value></default_value>
+      <edit_format_params>Sedo_TabsController_Listener::render_usergroups</edit_format_params>
+      <sub_options>*</sub_options>
+      <relation group_id="sedo_tabs_controller" display_order="100"/>
+    </option>
+  </optiongroups>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="option_group_sedo_tabs_controller" version_id="0" version_string="1.0.0"><![CDATA[Tabs controller]]></phrase>
+    <phrase title="option_group_sedo_tabs_controller_description" version_id="0" version_string="1.0.0"><![CDATA[Options to configure XenForo extra tabs]]></phrase>
+    <phrase title="option_sedo_extratabs_ctrl_settings" version_id="0" version_string="1.0.0"><![CDATA[Extra-tabs Controller settings]]></phrase>
+    <phrase title="option_sedo_extratabs_ctrl_settings_explain" version_id="0" version_string="1.0.0"><![CDATA[]]></phrase>
+    <phrase title="option_sedo_tabs_help_disable" version_id="0" version_string="1.0.0"><![CDATA[Disable Help tab]]></phrase>
+    <phrase title="option_sedo_tabs_help_disable_explain" version_id="0" version_string="1.0.0"><![CDATA[]]></phrase>
+    <phrase title="option_sedo_tabs_help_usergroups" version_id="0" version_string="1.0.0"><![CDATA[Disable Help tab for usergroups]]></phrase>
+    <phrase title="option_sedo_tabs_help_usergroups_explain" version_id="0" version_string="1.0.0"><![CDATA[Primary and secondary usergroups will be checked.]]></phrase>
+    <phrase title="option_sedo_tabs_members_disable" version_id="0" version_string="1.0.0"><![CDATA[Disable Members tab]]></phrase>
+    <phrase title="option_sedo_tabs_members_disable_explain" version_id="0" version_string="1.0.0"><![CDATA[]]></phrase>
+    <phrase title="option_sedo_tabs_members_usergroups" version_id="0" version_string="1.0.0"><![CDATA[Disable Members tab for usergroups]]></phrase>
+    <phrase title="option_sedo_tabs_members_usergroups_explain" version_id="0" version_string="1.0.0"><![CDATA[Primary and secondary usergroups will be checked.]]></phrase>
+    <phrase title="sedo_tabs_ctrl_default_values" version_id="0" version_string="1.0.0"><![CDATA[Default values: position "<b>{pos}</b>", order "<b>{order}</b>"]]></phrase>
+    <phrase title="sedo_tabs_ctrl_disable_tab_for_usergroups" version_id="0" version_string="1.0.0"><![CDATA[Disable for these usergroups]]></phrase>
+    <phrase title="sedo_tabs_ctrl_disable_tab_for_view" version_id="0" version_string="1.0.0"><![CDATA[Disable for these viewNames]]></phrase>
+    <phrase title="sedo_tabs_ctrl_disable_tab_for_view_explain" version_id="0" version_string="1.0.0"><![CDATA[Enter a viewName by line]]></phrase>
+    <phrase title="sedo_tabs_ctrl_extraclass" version_id="0" version_string="1.0.0"><![CDATA[Css extra class]]></phrase>
+  </phrases>
+  <route_prefixes/>
+  <style_properties/>
+  <templates/>
+  <public_template_modifications>
+    <modification template="navigation" modification_key="sedo_tabs_controller_extraclass" description="Add an optionnal extra class to the tabs" execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[<li class="navTab {$extraTabId}]]></find>
+      <replace><![CDATA[$0 {xen:if '{$extraTab.extraClass}', '{$extraTab.extraClass}'}]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
