@@ -134,6 +134,16 @@ class Sedo_TabsController_Listener
 			{
 				$newExtraTabs[$tabKey]['extraClass'] = $extraTabsConfig[$tabKey]['extraClass'];
 			}
+
+			if(!empty($extraTabsConfig[$tabKey]['beforeHtml']))
+			{
+				$newExtraTabs[$tabKey]['beforeHtml'] = $extraTabsConfig[$tabKey]['beforeHtml'];
+			}
+
+			if(!empty($extraTabsConfig[$tabKey]['afterHtml']))
+			{
+				$newExtraTabs[$tabKey]['afterHtml'] = $extraTabsConfig[$tabKey]['afterHtml'];
+			}
 		}
 
 		foreach($extraTabs as $tabKey => $tabData)
@@ -184,6 +194,16 @@ class Sedo_TabsController_Listener
 			if(!isset($tabData['extraClass']))
 			{
 				$tabData['extraClass'] = '';
+			}
+
+			if(!isset($tabData['beforeHtml']))
+			{
+				$tabData['beforeHtml'] = '';
+			}
+
+			if(!isset($tabData['afterHtml']))
+			{
+				$tabData['afterHtml'] = '';
 			}
 
 			if(!isset($tabData['disableTab']))
@@ -256,6 +276,8 @@ class Sedo_TabsController_Listener
 				 $tabData['disableUsergroups'] = array();
 				 $tabData['disableTab'] = false;
 				 $tabData['disableView'] = '';
+ 				 $tabData['beforeHtml'] = '';
+ 				 $tabData['afterHtml'] = '';
 			}
 			return true;
 		}

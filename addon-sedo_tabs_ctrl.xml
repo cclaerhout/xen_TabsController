@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="sedo_tabs_ctrl" title="Tabs controller" version_string="1.0.0" version_id="0" url="" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+<addon addon_id="sedo_tabs_ctrl" title="Tabs controller" version_string="1.1.0" version_id="1" url="https://xenforo.com/community/resources/tabs-controller.3992/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -35,6 +35,16 @@
 							<dl class="ctrlUnit">
 								<dt><label for="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][extraClass]">{xen:phrase sedo_tabs_ctrl_extraclass}:</label></dt>
 								<dd><xen:textbox name="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][extraClass]" value="{xen:if '{$config.{$tab}.extraClass}', '{$config.{$tab}.extraClass}', '{$default.extraClass}'}" size="12" /></dd>
+							</dl>
+
+							<dl class="ctrlUnit">
+								<dt><label for="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][beforeHtml]">{xen:phrase sedo_tabs_ctrl_beforeHtml}:</label></dt>
+								<dd><xen:textbox name="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][beforeHtml]" value="{xen:if '{$config.{$tab}.beforeHtml}', '{$config.{$tab}.beforeHtml}', '{$default.beforeHtml}'}" size="30" /></dd>
+							</dl>
+							
+							<dl class="ctrlUnit">
+								<dt><label for="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][afterHtml]">{xen:phrase sedo_tabs_ctrl_afterHtml}:</label></dt>
+								<dd><xen:textbox name="{$fieldPrefix}[{$preparedOption.option_id}][{$tab}][afterHtml]" value="{xen:if '{$config.{$tab}.afterHtml}', '{$config.{$tab}.afterHtml}', '{$default.afterHtml}'}" size="30" /></dd>
 							</dl>
 							
 							{xen:raw $default.checkboxTemplate_usr}
@@ -141,6 +151,8 @@
     <phrase title="option_sedo_tabs_members_disable_explain" version_id="0" version_string="1.0.0"><![CDATA[]]></phrase>
     <phrase title="option_sedo_tabs_members_usergroups" version_id="0" version_string="1.0.0"><![CDATA[Disable Members tab for usergroups]]></phrase>
     <phrase title="option_sedo_tabs_members_usergroups_explain" version_id="0" version_string="1.0.0"><![CDATA[Primary and secondary usergroups will be checked.]]></phrase>
+    <phrase title="sedo_tabs_ctrl_afterHtml" version_id="0" version_string="1.0.0"><![CDATA[After title Html]]></phrase>
+    <phrase title="sedo_tabs_ctrl_beforeHtml" version_id="0" version_string="1.0.0"><![CDATA[Before title Html]]></phrase>
     <phrase title="sedo_tabs_ctrl_default_values" version_id="0" version_string="1.0.0"><![CDATA[Default values: position "<b>{pos}</b>", order "<b>{order}</b>"]]></phrase>
     <phrase title="sedo_tabs_ctrl_disable_tab_for_usergroups" version_id="0" version_string="1.0.0"><![CDATA[Disable for these usergroups]]></phrase>
     <phrase title="sedo_tabs_ctrl_disable_tab_for_view" version_id="0" version_string="1.0.0"><![CDATA[Disable for these viewNames]]></phrase>
@@ -151,7 +163,11 @@
   <style_properties/>
   <templates/>
   <public_template_modifications>
-    <modification template="navigation" modification_key="sedo_tabs_controller_extraclass" description="Add an optionnal extra class to the tabs" execution_order="10" enabled="1" action="str_replace">
+    <modification template="navigation" modification_key="sedo_tabs_controller_beforehtml" description="Add optional html before/html the tab title" execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[{$extraTab.title}]]></find>
+      <replace><![CDATA[{xen:if '{$extraTab.beforeHtml}', '{xen:raw $extraTab.beforeHtml}'} $0 {xen:if '{$extraTab.afterHtml}', '{xen:raw $extraTab.afterHtml}'}]]></replace>
+    </modification>
+    <modification template="navigation" modification_key="sedo_tabs_controller_extraclass" description="Add an optional extra class to the tabs" execution_order="10" enabled="1" action="str_replace">
       <find><![CDATA[<li class="navTab {$extraTabId}]]></find>
       <replace><![CDATA[$0 {xen:if '{$extraTab.extraClass}', '{$extraTab.extraClass}'}]]></replace>
     </modification>
