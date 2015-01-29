@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="sedo_tabs_ctrl" title="Tabs controller" version_string="1.1.0" version_id="1" url="https://xenforo.com/community/resources/tabs-controller.3992/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+<addon addon_id="sedo_tabs_ctrl" title="Tabs controller" version_string="1.1.0" version_id="2" url="https://xenforo.com/community/resources/tabs-controller.3992/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
   <admin_navigation/>
   <admin_permissions/>
   <admin_style_properties/>
@@ -163,8 +163,8 @@
   <style_properties/>
   <templates/>
   <public_template_modifications>
-    <modification template="navigation" modification_key="sedo_tabs_controller_beforehtml" description="Add optional html before/html the tab title" execution_order="10" enabled="1" action="str_replace">
-      <find><![CDATA[{$extraTab.title}]]></find>
+    <modification template="navigation" modification_key="sedo_tabs_controller_beforehtml" description="Add optional html before/html the tab title" execution_order="10" enabled="1" action="preg_replace">
+      <find><![CDATA[#{\$extraTab\.title}(?!</h3>)#]]></find>
       <replace><![CDATA[{xen:if '{$extraTab.beforeHtml}', '{xen:raw $extraTab.beforeHtml}'} $0 {xen:if '{$extraTab.afterHtml}', '{xen:raw $extraTab.afterHtml}'}]]></replace>
     </modification>
     <modification template="navigation" modification_key="sedo_tabs_controller_extraclass" description="Add an optional extra class to the tabs" execution_order="10" enabled="1" action="str_replace">
